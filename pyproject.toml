@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ibm-quantum-runner"
+version = "0.1.0"
+description = "Persistent, resumable Qiskit execution on IBM Quantum hardware"
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Giovanni" },
+]
+keywords = ["qiskit", "ibm-quantum", "quantum-computing", "runtime"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  "python-dotenv>=1.0,<2",
+  "qiskit>=2.3,<2.6",
+    "qiskit-aer>=0.17.2,<0.18",
+    "qiskit-ibm-runtime>=0.45,<0.49",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15",
+    "pytest>=8,<10",
+    "pytest-cov>=6",
+    "ruff>=0.11",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ibm_quantum_runner"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "integration: local integration tests that never contact IBM services",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["B018"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["ibm_quantum_runner"]
+strict = true
+warn_unreachable = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = ["qiskit.*", "qiskit_aer.*", "qiskit_ibm_runtime.*"]
+ignore_missing_imports = true
